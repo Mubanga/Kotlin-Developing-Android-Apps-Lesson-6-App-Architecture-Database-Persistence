@@ -15,3 +15,27 @@
  */
 
 package com.example.android.trackmysleepquality.database
+
+import android.os.SystemClock
+import androidx.room.ColumnInfo
+import androidx.room.Entity
+import androidx.room.PrimaryKey
+
+@Entity(tableName = "daily_sleep_quality_table")
+data class SleepNight(
+
+        @PrimaryKey(autoGenerate = true)
+        var NightID: Long = 0L,
+
+        @ColumnInfo(name = "start_time_milli")
+        val StartTimeMilli: Long = System.currentTimeMillis(),
+
+        @ColumnInfo(name = "end_time_milli")
+        var EndTimeMilli:Long = StartTimeMilli,
+
+        // The Selection Of " -1 " Is Indicative Of No Selection Being Made
+        @ColumnInfo(name = "quality_rating")
+        var SleepQuality: Int = -1
+
+
+)
