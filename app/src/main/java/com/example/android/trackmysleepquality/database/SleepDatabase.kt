@@ -15,3 +15,57 @@
  */
 
 package com.example.android.trackmysleepquality.database
+
+import android.content.Context
+import androidx.room.Database
+import androidx.room.Room
+import androidx.room.RoomDatabase
+
+/**
+ *  Creating Room Databases Is Done With A Singleton Design Pattern Because You Only Ever Really
+ *  Want To Have One Instance Present Throughout The Entirety Of The Application At Any One Time
+ */
+
+@Database(entities = [SleepNight::class],version = 1,exportSchema = false)
+abstract class SleepDatabase :RoomDatabase(){
+
+    abstract val sleepDatabaseDao: SleepDatabaseDao
+
+    companion object{
+
+        // Necessary To Make The Instance Volatile So It Is Updated Regularly And Not Cached
+        //
+        @Volatile
+        private var _INSTANCE:SleepDatabase? = null
+
+        fun getInstance(context: Context) : SleepDatabase{
+            /** ***N.B*** Very Important To Synchronize The Database So Multiple Threads Don't Attempt
+             *  To Access The Same Database Instance At The Same Time...Hence Synchronized
+             */
+            synchronized(this)
+            {
+                var Instance = _INSTANCE
+                if(Instance==null)
+                {
+                    Instance = Room.databaseBuilder(context.applicationContext,
+                            SleepDatabase::class.java,
+                            "sleep_history_database")
+                            .fallbackToDestructiveMigration()
+                            .build()
+                    // This Might Look Weird But You Are Taking Advantage Of Kotlin's Smart Casting
+                    _INSTANCE = Instance
+                }
+
+                // This Should Never Be Null Though
+                return _INSTANCE!!
+
+            }
+
+
+        }
+
+    }
+
+
+
+}
