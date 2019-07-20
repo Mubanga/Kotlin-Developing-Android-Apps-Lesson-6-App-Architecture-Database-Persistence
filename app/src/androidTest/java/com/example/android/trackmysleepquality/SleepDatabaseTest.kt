@@ -67,5 +67,37 @@ class SleepDatabaseTest {
         val tonight = sleepDao.getTonight()
         assertEquals(tonight?.SleepQuality, -1)
     }
+
+    @Test
+    @Throws(Exception::class)
+    fun getAllNightsAndClear() {
+        var twelfth_night_before: MutableList<SleepNight> = mutableListOf<SleepNight>()
+        val populated_sleep_night: MutableList<SleepNight> = mutableListOf<SleepNight>()
+        for (x in 1..10) {
+            val current_night: SleepNight = SleepNight()
+            sleepDao.insert(current_night)
+        //    populated_sleep_night.add(current_night)
+        }
+        val twelfth_night_after = sleepDao.getAllNights()
+        for (x in 1..10) {
+            val retrieved_night_ID = sleepDao.get((x.toLong()))?.NightID
+            assertEquals(retrieved_night_ID,x.toLong())
+        }
+
+
+        // Clear The Database
+//        sleepDao.clear()
+//        var twelfth_night_empty = mutableListOf<SleepNight>()
+//        twelfth_night_empty.clear()
+//        val twelfth_night_after_clearing = sleepDao?.getAllNights()
+//        assertEquals(twelfth_night_after_clearing,twelfth_night_empty)
+//        var twelfth_night
+//        for(x in twelfth_night)
+//        {
+//            sleepDao.insert(x)
+//        }
+
+
+    }
 }
 
